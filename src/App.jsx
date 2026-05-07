@@ -8,10 +8,10 @@ function App() {
     { id: 'Device 2', temperature: 35, humidity: 80 },
   ]);
 
-  function updateDeviceData(index) {
+  function updateData(index) {
     const newDevices = [...devices];
 
-    newDevices[index].temperature = Math.floor(Math.random() * 40);
+    newDevices[index].temperature = Math.floor(Math.random() * 50);
     newDevices[index].humidity = Math.floor(Math.random() * 100);
 
     setDevices(newDevices);
@@ -20,7 +20,7 @@ function App() {
   function refresh() {
     const newDevices = devices.map(device => ({
       ...device,
-      temperature: Math.floor(Math.random() * 40),
+      temperature: Math.floor(Math.random() * 50),
       humidity: Math.floor(Math.random() * 100)
     }));
 
