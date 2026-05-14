@@ -3,6 +3,8 @@ import { useState } from "react";
 
 function App() {
 
+  const [open, setOpen] = useState(false);
+
   const [devices, setDevices] = useState([
     { id: 'Device 1', temperature: 25, humidity: 60 },
     { id: 'Device 2', temperature: 35, humidity: 80 },
@@ -17,6 +19,8 @@ function App() {
     setDevices(newDevices);
   }
 
+  console.log(devices);
+
   function refresh() {
     const newDevices = devices.map(device => ({
       ...device,
@@ -28,39 +32,55 @@ function App() {
   }
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>IoT Dashboard</h1>
 
-      <button onClick={refresh} style={{ marginBottom: "20px" }}>
-        Refresh Data
+    <div>
+
+      {/* Sidebar Button */}
+      <button className="menu-btn" onClick={() => setOpen(!open)}>
+        ☰
       </button>
 
-      {devices.map((device, index) => (
-        <div
-          key={index}
-          style={{
-            border: "1px solid gray",
-            margin: "10px",
-            padding: "10px"
-          }}
-        >
-          <h3>{device.id}</h3>
+     
+      <div className={open ? "sidebar active" : "sidebar"}>
+        <h2>Dashboard Menu</h2>
 
-         
-          <p
-            style={{
-              color: device.temperature < 30 ? "green" : "red"  // terniary operator to set color based on temperature 
-            }}
-          >
-            Temperature: {device.temperature}°C
-          </p>
+        <ul>
+        <li>Devices</li>
+        </ul>
+      </div>
 
-          <p>Humidity: {device.humidity}%</p>
+      {/* Main Content */}
+      <div className="h1">
+        <h1>IoT Dashboard</h1>
 
+        <button onClick={refresh} style={{ marginBottom: "20px" }}>
+          Refresh Data
+        </button>
 
-        </div>
-      ))}
-    </div>  
+        <p className='time'>
+          Last Updated: {new Date().toLocaleTimeString()}
+        </p>
+
+        {devices.map((device, index) => (
+          <div className='device-card' key={index}>
+
+            <div className='h3'>{device.id}</div>
+
+            <p
+              style={{
+                color: device.temperature < 30 ? "green" : "red"
+              }}
+            >
+              Temperature: {device.temperature}°C
+            </p>
+
+            <p>Humidity: {device.humidity}%</p>
+
+          </div>
+        ))}
+      </div>
+
+    </div>
   );
 }
 
