@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
 
@@ -19,8 +19,6 @@ function App() {
     setDevices(newDevices);
   }
 
-  console.log(devices);
-
   function refresh() {
     const newDevices = devices.map(device => ({
       ...device,
@@ -31,26 +29,33 @@ function App() {
     setDevices(newDevices);
   }
 
+
+  useEffect(() => {
+    const interval = setInterval(() => { refresh(); }, 5000);
+
+    return () => clearInterval(interval);
+  }, [devices]);
+
+  console.log(devices);
+
   return (
 
     <div>
 
-      {/* Sidebar Button */}
       <button className="menu-btn" onClick={() => setOpen(!open)}>
         ☰
       </button>
 
-     
       <div className={open ? "sidebar active" : "sidebar"}>
         <h2>Dashboard Menu</h2>
 
         <ul>
-        <li>Devices</li>
+          <li>Devices</li>
         </ul>
       </div>
 
-      {/* Main Content */}
       <div className="h1">
+
         <h1>IoT Dashboard</h1>
 
         <button onClick={refresh} style={{ marginBottom: "20px" }}>
@@ -78,7 +83,12 @@ function App() {
 
           </div>
         ))}
+
       </div>
+
+      <footer className='footer'>
+        <p>2026 IoT Monitoring Dashboard</p>
+      </footer>
 
     </div>
   );
