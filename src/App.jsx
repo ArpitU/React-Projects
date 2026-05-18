@@ -31,9 +31,8 @@ function App() {
 
 
   useEffect(() => {
-    const interval = setInterval(() => { refresh(); }, 5000);
+    const interval = setInterval(() => { refresh(); }, 5000);  // hmesa time ms me rehta hh 
 
-    return () => clearInterval(interval);
   }, [devices]);
 
   console.log(devices);
