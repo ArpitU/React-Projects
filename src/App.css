@@ -125,7 +125,6 @@ body{
     0 0 40px rgba(0,255,255,0.08);
 }
 
-/* Left */
 .device-left{
 
   display:flex;
@@ -227,7 +226,6 @@ body{
   left:0;
 }
 
-/* Sidebar Title */
 .sidebar h2{
 
   margin-top:30px;
@@ -263,18 +261,6 @@ body{
 }
 
 
-.close-btn{
-
-  position:absolute;
-
-  top:20px;
-
-  right:20px;
-
-  font-size:22px;
-
-  cursor:pointer;
-}
 
 
 .menu-btn{
@@ -385,6 +371,13 @@ body{
   font-size: 42px;
   margin: 0;
   font-weight: 600;
+}
+
+.footer-logo h1 img{
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  image-rendering: crisp-edges;
 }
 
 .footer-logo p{

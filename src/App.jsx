@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from "react";
-
+import hero from "./assets/hero.png";
 function App() {
 
   const [open, setOpen] = useState(false);
@@ -11,7 +11,7 @@ function App() {
     { id: 'Device 3', temperature: 18, humidity: 40 },
   ]);
 
-  // Refresh Device Data
+ 
   function refresh() {
 
     const newDevices = devices.map(device => ({
@@ -27,7 +27,7 @@ function App() {
     setDevices(newDevices);
   }
 
-  // Auto Refresh
+
   useEffect(() => {
 
     const interval = setInterval(() => {
@@ -42,7 +42,7 @@ function App() {
 
     <div className="app">
 
-      {/* Sidebar Button */}
+      
       {
         !open && (
 
@@ -56,7 +56,7 @@ function App() {
         )
       }
 
-      {/* Sidebar */}
+     
       <div className={open ? "sidebar active" : "sidebar"}>
 
         <h2>Dashboard</h2>
@@ -70,7 +70,6 @@ function App() {
 
       </div>
 
-      {/* Overlay */}
       {
         open && (
           <div
@@ -80,7 +79,7 @@ function App() {
         )
       }
 
-      {/* Header */}
+    
       <div className="header">
 
         <h1>IoT Dashboard</h1>
@@ -94,14 +93,14 @@ function App() {
 
       </div>
 
-      {/* Last Updated */}
+      
       <p className='time'>
         Last Updated:
         {" "}
         {new Date().toLocaleTimeString()}
       </p>
 
-      {/* Device Grid */}
+      
       <div className="container">
 
         {devices.map((device, index) => (
@@ -111,17 +110,17 @@ function App() {
             key={index}
           >
 
-            {/* Left */}
+          
             <div className='device-left'>
 
               <h2>{device.id}</h2>
 
             </div>
 
-            {/* Right */}
+            
             <div className='device-right'>
 
-              {/* Temperature */}
+            
               <div className='temperature'>
 
                 <p
@@ -137,7 +136,7 @@ function App() {
 
               </div>
 
-              {/* Humidity */}
+              
               <div className='humidity'>
 
                 <p>
@@ -154,15 +153,19 @@ function App() {
 
       </div>
 
-      {/* Footer */}
+    
       <footer className="footer">
 
         <div className="footer-container">
 
-          {/* Left Logo */}
+         
           <div className="footer-logo">
 
-            <h1>CoreData</h1>
+
+            <h1>
+              <img src={hero} alt="CoreData" />
+              CoreData
+            </h1>
 
             <p>
               Enabling things to Communicate
@@ -170,7 +173,7 @@ function App() {
 
           </div>
 
-          {/* Contact Section */}
+         
           <div className="footer-contact">
 
             <div className="contact-item">
@@ -205,7 +208,7 @@ function App() {
 
           </div>
 
-          {/* Newsletter */}
+         
           <div className="footer-newsletter">
 
             <h2>Stay updated!</h2>
