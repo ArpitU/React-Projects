@@ -126,9 +126,7 @@ function App() {
                 <p
                   style={{
                     color:
-                      device.temperature < 30
-                        ? "#00ff88"
-                        : "#ff4d4d"
+                      device.temperature < 30? "#00ff88" : "#ff4d4d"
                   }}
                 >
                   🌡 {device.temperature}°C
