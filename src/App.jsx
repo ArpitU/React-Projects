@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from "react";
-import logo from "./assets/logo.jpeg";
+import logo from "./assets/logo (2).jpeg";
 function App() {
 
   const [open, setOpen] = useState(false);
@@ -162,12 +162,10 @@ function App() {
 
             <h1>
               <img src={logo} alt="CoreData" />
-              CoreData
+              
             </h1>
 
-            <p>
-              Enabling things to Communicate
-            </p>
+            
 
           </div>
 
