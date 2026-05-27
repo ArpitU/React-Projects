@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from "react";
-import hero from "./assets/hero.png";
+import logo from "./assets/logo.jpeg";
 function App() {
 
   const [open, setOpen] = useState(false);
@@ -161,7 +161,7 @@ function App() {
 
 
             <h1>
-              <img src={hero} alt="CoreData" />
+              <img src={logo} alt="CoreData" />
               CoreData
             </h1>
 
