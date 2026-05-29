@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from "react";
-import logo from "./assets/logo (2).jpeg";
+import logo  from "./assets/logo (2).jpeg";
 function App() {
 
   const [open, setOpen] = useState(false);
