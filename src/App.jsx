@@ -26,6 +26,12 @@ function App() {
 
     setDevices(newDevices);
   }
+  function filterDevices() {
+
+    const filtered = devices.filter(device => device.temperature > 30);
+    setDevices(filtered);
+    return filtered;
+  }
 
 
   useEffect(() => {
@@ -90,7 +96,14 @@ function App() {
         >
           Refresh Data
         </button>
-
+        <br></br>
+        <br></br>
+      <button
+      className="filter-btn"
+      onClick={filterDevices}
+      >
+        Filter Devices
+      </button>
       </div>
 
       
