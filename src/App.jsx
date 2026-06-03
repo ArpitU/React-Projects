@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useEffect } from "react";
-import logo  from "./assets/logo (2).jpeg";
+import logo from "./assets/logo (2).jpeg";
+
 function App() {
 
   const [open, setOpen] = useState(false);
@@ -11,28 +12,31 @@ function App() {
     { id: 'Device 3', temperature: 18, humidity: 40 },
   ]);
 
- 
+  const [filterType, setFilterType] = useState("all");
+
   function refresh() {
 
     const newDevices = devices.map(device => ({
       ...device,
-
-      temperature:
-        Math.floor(Math.random() * 50),
-
-      humidity:
-        Math.floor(Math.random() * 100)
+      temperature: Math.floor(Math.random() * 50),
+      humidity: Math.floor(Math.random() * 100)
     }));
 
     setDevices(newDevices);
   }
-  function filterDevices() {
 
-    const filtered = devices.filter(device => device.temperature > 30);
-    setDevices(filtered);
-    return filtered;
-  }
+  const displayedDevices = devices.filter((device) => {
 
+    if (filterType === "temperature") {
+      return device.temperature > 30;
+    }
+
+    if (filterType === "humidity") {
+      return device.humidity > 70;
+    }
+
+    return true;
+  });
 
   useEffect(() => {
 
@@ -42,13 +46,12 @@ function App() {
 
     return () => clearInterval(interval);
 
-  }, [devices]);
+  }, []);
 
   return (
 
     <div className="app">
 
-      
       {
         !open && (
 
@@ -62,7 +65,6 @@ function App() {
         )
       }
 
-     
       <div className={open ? "sidebar active" : "sidebar"}>
 
         <h2>Dashboard</h2>
@@ -85,7 +87,6 @@ function App() {
         )
       }
 
-    
       <div className="header">
 
         <h1>IoT Dashboard</h1>
@@ -96,50 +97,56 @@ function App() {
         >
           Refresh Data
         </button>
-        <br></br>
-        <br></br>
-      <button
-      className="filter-btn"
-      onClick={filterDevices}
-      >
-        Filter Devices
-      </button>
+
+        <br />
+        <br />
+
+        <select
+          className="filter-btn"
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+        >
+          <option value="all">All Devices</option>
+          <option value="temperature">
+            High Temperature (&gt; 30°C)
+          </option>
+          <option value="humidity">
+            High Humidity (&gt; 70%)
+          </option>
+        </select>
+
       </div>
 
-      
       <p className='time'>
-        Last Updated:
-        {" "}
+        Last Updated:{" "}
         {new Date().toLocaleTimeString()}
       </p>
 
-      
       <div className="container">
 
-        {devices.map((device, index) => (
+        {displayedDevices.map((device, index) => (
 
           <div
             className='device-card'
             key={index}
           >
 
-          
             <div className='device-left'>
 
               <h2>{device.id}</h2>
 
             </div>
 
-            
             <div className='device-right'>
 
-            
               <div className='temperature'>
 
                 <p
                   style={{
                     color:
-                      device.temperature < 30? "#00ff88" : "#ff4d4d"
+                      device.temperature < 30
+                        ? "#00ff88"
+                        : "#ff4d4d"
                   }}
                 >
                   🌡 {device.temperature}°C
@@ -147,7 +154,6 @@ function App() {
 
               </div>
 
-              
               <div className='humidity'>
 
                 <p>
@@ -164,25 +170,18 @@ function App() {
 
       </div>
 
-    
       <footer className="footer">
 
         <div className="footer-container">
 
-         
           <div className="footer-logo">
-
 
             <h1>
               <img src={logo} alt="CoreData" />
-              
             </h1>
-
-            
 
           </div>
 
-         
           <div className="footer-contact">
 
             <div className="contact-item">
@@ -217,7 +216,6 @@ function App() {
 
           </div>
 
-         
           <div className="footer-newsletter">
 
             <h2>Stay updated!</h2>
