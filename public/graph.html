@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Flow Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<canvas id="waterChart"></canvas>
+
+<script>
+const ctx = document.getElementById('waterChart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+        datasets: [{
+            label: 'Water Flow (Litres)',
+            data: [60, 150, 135, 180, 165],
+            borderWidth: 3,
+            fill: false
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Litres'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Days'
+                }
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>

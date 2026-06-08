@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Locations</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f6f9;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #map {
+      width: 90%;
+      height: 600px;
+      margin: auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>IoT Device Locations</h1>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+
+    const bounds = [
+      [20.27, 85.80], // South-West
+      [20.32, 85.85]  // North-East
+    ];
+
+    const map = L.map("map", {
+      maxBounds: bounds,
+      maxBoundsViscosity: 1.0,
+      minZoom: 14,
+      maxZoom: 20
+    }).setView([20.2961, 85.8245], 15);
+
+    L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        attribution: "&copy; OpenStreetMap contributors"
+      }
+    ).addTo(map);
+
+    const deviceIcon = L.icon({
+      iconUrl:
+        "https://static.vecteezy.com/system/resources/thumbnails/007/126/517/small_2x/water-droplet-icon-free-vector.jpg",
+      iconSize: [35, 35],
+      iconAnchor: [17, 35]
+    });
+
+    const devices = [
+      [20.2861, 85.8245],
+      [20.3005, 85.8300],
+      [20.2920, 85.8180],
+      [20.3040, 85.8380],
+      [20.2875, 85.8275]
+    ];
+
+    devices.forEach((location) => {
+      L.marker(location, {
+        icon: deviceIcon
+      }).addTo(map);
+    });
+
+  </script>
+
+</body>
+</html>

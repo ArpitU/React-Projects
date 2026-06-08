@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useEffect } from "react";
 import logo from "./assets/logo (2).jpeg";
+import Navbar from './components/section 1/section1';
 
 function App() {
 
@@ -24,7 +25,26 @@ function App() {
 
     setDevices(newDevices);
   }
-
+  function filtersearch(){
+    input=document.getElementById("searchbar").value.toLowerCase();
+    devicecards=document.getElementsByClassName("device-card");
+    for(var i=0;i<devicecards.length;i++){
+      let deviceName=devicecards[i].getElementsByClassName("device-left")[0].innerText.toLowerCase();
+      if(deviceName.includes(input)){
+        devicecards[i].style.display="flex";
+      }
+      else{
+        devicecards[i].style.display="none";
+      }
+    }
+  }
+  const [searchTerm, setSearchTerm] = useState("");
+  <input
+  type="text"
+  placeholder="Search devices..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+/>
   const displayedDevices = devices.filter((device) => {
 
     if (filterType === "temperature") {
@@ -47,6 +67,7 @@ function App() {
     return () => clearInterval(interval);
 
   }, []);
+
 
   return (
 
@@ -73,7 +94,9 @@ function App() {
           <li>Home</li>
           <li>Devices</li>
           <li>Analytics</li>
-          <li>Settings</li>
+          <li><a href="maps.html">Maps</a></li>
+          <li><a href="graph.html">Graph</a></li>
+          <li><a href="login.html">Login</a></li>
         </ul>
 
       </div>
@@ -87,10 +110,9 @@ function App() {
         )
       }
 
-      <div className="header">
 
-        <h1>IoT Dashboard</h1>
-
+        <div><h1>IoT Dashboard</h1>
+       
         <button
           className="refresh-btn"
           onClick={refresh}
