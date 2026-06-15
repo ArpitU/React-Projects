@@ -42,7 +42,8 @@ function App() {
     if (
       search === "high temperature"||
       search ==="temperature"||
-      search ==="hot"
+      search ==="hot"||
+      search === "temp"
     )
      {
       return device.temperature > 30;
