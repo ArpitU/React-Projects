@@ -5,6 +5,7 @@ import Navbar from './components/section 1/section1';
 
 function App() {
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
 
   const [devices, setDevices] = useState([
@@ -16,7 +17,6 @@ function App() {
   const [filterType, setFilterType] = useState("all");
 
   function refresh() {
-
     const newDevices = devices.map(device => ({
       ...device,
       temperature: Math.floor(Math.random() * 50),
@@ -25,38 +25,52 @@ function App() {
 
     setDevices(newDevices);
   }
-  function filtersearch(){
-    input=document.getElementById("searchbar").value.toLowerCase();
-    devicecards=document.getElementsByClassName("device-card");
-    for(var i=0;i<devicecards.length;i++){
-      let deviceName=devicecards[i].getElementsByClassName("device-left")[0].innerText.toLowerCase();
-      if(deviceName.includes(input)){
-        devicecards[i].style.display="flex";
-      }
-      else{
-        devicecards[i].style.display="none";
-      }
-    }
-  }
-  const [searchTerm, setSearchTerm] = useState("");
-  <input
-  type="text"
-  placeholder="Search devices..."
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-/>
-  const displayedDevices = devices.filter((device) => {
 
-    if (filterType === "temperature") {
+  const displayedDevices = devices.filter((device) => {
+    const search = searchTerm.toLowerCase().trim();
+
+    // Dropdown Filter
+    if (filterType === "temperature" && device.temperature <= 30) {
+      return false;
+    }
+
+    if (filterType === "humidity" && device.humidity <= 70) {
+      return false;
+    }
+
+    // Search Keywords
+    if (
+      search === "temperature" ||
+      search === "high temperature" ||
+      search === "temp"
+    ) {
       return device.temperature > 30;
     }
 
-    if (filterType === "humidity") {
+    if (
+      search === "humidity" ||
+      search === "high humidity"
+    ) {
       return device.humidity > 70;
     }
 
-    return true;
+    // Empty Search → Show all devices
+    if (search === "") {
+      return true;
+    }
+
+    // Device Name Search
+    return device.id.toLowerCase().includes(search);
   });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refresh();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
 
   useEffect(() => {
 
@@ -122,7 +136,14 @@ function App() {
 
         <br />
         <br />
-
+        <input
+         className="search-bar"
+        type="text"
+          placeholder="Search devices..."
+        value={searchTerm}
+         onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <label htmlFor="filter">Filter: </label>
         <select
           className="filter-btn"
           value={filterType}
