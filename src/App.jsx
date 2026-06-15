@@ -40,18 +40,89 @@ function App() {
 
     // Search Keywords
     if (
-      search === "temperature" ||
-      search === "high temperature" ||
-      search === "temp"
-    ) {
+      search === "high temperature"||
+      search ==="temperature"||
+      search ==="hot"
+    )
+     {
       return device.temperature > 30;
     }
+    if(
+      search ==="5"
+    )
+    {return device.temperature > 5;
+
+    }
+        if(
+      search ==="10"
+    )
+    {return device.temperature > 10;
+
+    }
+            if(
+      search ==="15"
+    )
+    {return device.temperature > 15;
+
+    }
+            if(
+      search ==="20"
+    )
+    {return device.temperature > 20;
+
+    }
+            if(
+      search ==="25"
+    )
+    {return device.temperature > 25;
+
+    }
+            if(
+      search ==="30"
+    )
+    {return device.temperature > 30;
+
+    }
+            if(
+      search ==="35"
+    )
+    {return device.temperature > 35;
+
+    }
+            if(
+      search ==="40"
+    )
+    {return device.temperature > 40;
+
+    }
+            if(
+      search ==="45"
+    )
+    {return device.temperature > 45;
+
+    }
+            if(
+      search ==="50"
+    )
+    {return device.temperature > 50;
+
+    }
+
+    
 
     if (
       search === "humidity" ||
-      search === "high humidity"
+      search === "high humidity"||
+      search ==="high humid"
     ) {
       return device.humidity > 70;
+    }
+      if (
+      search === "low humidity" ||
+      search === "less humidity"||
+      search ===" low humid"
+    ) {
+      return device.humidity < 70;
     }
 
     // Empty Search → Show all devices
