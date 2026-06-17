@@ -7,7 +7,9 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
-
+  const [parameter, setParameter] = useState("temperature");
+  const [operator, setOperator] = useState(">");
+  const [filterValue, setFilterValue] = useState("");
   const [devices, setDevices] = useState([
     { id: 'Device 1', temperature: 25, humidity: 60 },
     { id: 'Device 2', temperature: 35, humidity: 80 },
@@ -26,114 +28,39 @@ function App() {
     setDevices(newDevices);
   }
 
-  const displayedDevices = devices.filter((device) => {
-    const search = searchTerm.toLowerCase().trim();
+const displayedDevices = devices.filter((device) => {
 
-    // Dropdown Filter
-    if (filterType === "temperature" && device.temperature <= 30) {
-      return false;
-    }
+  if (filterValue === "") return true;
 
-    if (filterType === "humidity" && device.humidity <= 70) {
-      return false;
-    }
+  const value = Number(filterValue);
 
-    // Search Keywords
-    if (
-      search === "high temperature"||
-      search ==="temperature"||
-      search ==="hot"||
-      search === "temp"
-    )
-     {
-      return device.temperature > 30;
-    }
-    if(
-      search ==="5"
-    )
-    {return device.temperature > 5;
+  const deviceValue =
+    parameter === "temperature"
+      ? device.temperature
+      : device.humidity;
 
-    }
-        if(
-      search ==="10"
-    )
-    {return device.temperature > 10;
+  switch (operator) {
 
-    }
-            if(
-      search ==="15"
-    )
-    {return device.temperature > 15;
+    case ">":
+      return deviceValue > value;
 
-    }
-            if(
-      search ==="20"
-    )
-    {return device.temperature > 20;
+    case "<":
+      return deviceValue < value;
 
-    }
-            if(
-      search ==="25"
-    )
-    {return device.temperature > 25;
+    case "=":
+      return deviceValue === value;
 
-    }
-            if(
-      search ==="30"
-    )
-    {return device.temperature > 30;
+    case ">=":
+      return deviceValue >= value;
 
-    }
-            if(
-      search ==="35"
-    )
-    {return device.temperature > 35;
+    case "<=":
+      return deviceValue <= value;
 
-    }
-            if(
-      search ==="40"
-    )
-    {return device.temperature > 40;
-
-    }
-            if(
-      search ==="45"
-    )
-    {return device.temperature > 45;
-
-    }
-            if(
-      search ==="50"
-    )
-    {return device.temperature > 50;
-
-    }
-
-    
-
-    if (
-      search === "humidity" ||
-      search === "high humidity"||
-      search ==="high humid"
-    ) {
-      return device.humidity > 70;
-    }
-      if (
-      search === "low humidity" ||
-      search === "less humidity"||
-      search ===" low humid"
-    ) {
-      return device.humidity < 70;
-    }
-
-    // Empty Search → Show all devices
-    if (search === "") {
+    default:
       return true;
-    }
+  }
 
-    // Device Name Search
-    return device.id.toLowerCase().includes(search);
-  });
+});
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -208,27 +135,38 @@ function App() {
 
         <br />
         <br />
-        <input
-         className="search-bar"
-        type="text"
-          placeholder="Search devices..."
-        value={searchTerm}
-         onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <label htmlFor="filter">Filter: </label>
-        <select
-          className="filter-btn"
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-        >
-          <option value="all">All Devices</option>
-          <option value="temperature">
-            High Temperature (&gt; 30°C)
-          </option>
-          <option value="humidity">
-            High Humidity (&gt; 70%)
-          </option>
-        </select>
+       <div className="advanced-filter">
+
+  <select
+  className="filter-btn"
+    value={parameter}
+    onChange={(e) => setParameter(e.target.value)}
+  >
+    <option value="temperature">Temperature</option>
+    <option value="humidity">Humidity</option>
+  </select>
+
+  <select
+  className="filter-btn"
+    value={operator}
+    onChange={(e) => setOperator(e.target.value)}
+  >
+    <option value=">">Greater Than</option>
+    <option value="<">Less Than</option>
+    <option value="=">Equal To</option>
+    <option value=">=">Greater Than or Equal</option>
+    <option value="<=">Less Than or Equal</option>
+  </select>
+
+  <input 
+  className="filter-btn"
+    type="number"
+    placeholder="Enter value"
+    value={filterValue}
+    onChange={(e) => setFilterValue(e.target.value)}
+  />
+
+</div>
 
       </div>
 
