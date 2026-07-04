@@ -10,6 +10,26 @@ function App() {
   const [parameter, setParameter] = useState("temperature");
   const [operator, setOperator] = useState(">");
   const [filterValue, setFilterValue] = useState("");
+  const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbx0g1k5J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X8Z7z6y9v8F2G9J3X";
+
+const saveToGoogleSheet = async (deviceList) => {
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        devices: deviceList,
+      }),
+    });
+
+    console.log("Saved to Google Sheet");
+  } catch (error) {
+    console.error("Error saving:", error);
+  }
+};
   const [devices, setDevices] = useState([
     { id: 'Device 1', temperature: 25, humidity: 60 },
     { id: 'Device 2', temperature: 35, humidity: 80 },
@@ -18,16 +38,42 @@ function App() {
 
   const [filterType, setFilterType] = useState("all");
 
-  function refresh() {
-    const newDevices = devices.map(device => ({
-      ...device,
-      temperature: Math.floor(Math.random() * 50),
-      humidity: Math.floor(Math.random() * 100)
-    }));
+function refresh() {
 
-    setDevices(newDevices);
-  }
+  const newDevices = devices.map(device => ({
+    ...device,
+    temperature: Math.floor(Math.random() * 50),
+    humidity: Math.floor(Math.random() * 100)
+  }));
 
+  setDevices(newDevices);
+
+  saveToGoogleSheet(newDevices);
+
+}
+useEffect(() => {
+  saveToGoogleSheet(devices);
+}, []);
+
+function doPost(e) {
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("IoT_Data");
+
+  var data = JSON.parse(e.postData.contents);
+
+  data.devices.forEach(function(device){
+
+    sheet.appendRow([
+      new Date(),
+      device.id,
+      device.temperature,
+      device.humidity
+    ]);
+
+  });
+
+  return ContentService.createTextOutput("Success");
+}
 const displayedDevices = devices.filter((device) => {
 
   if (filterValue === "") return true;
@@ -65,7 +111,7 @@ const displayedDevices = devices.filter((device) => {
   useEffect(() => {
     const interval = setInterval(() => {
       refresh();
-    }, 5000);
+    }, 15000);
 
     return () => clearInterval(interval);
   }, []);
@@ -75,7 +121,7 @@ const displayedDevices = devices.filter((device) => {
 
     const interval = setInterval(() => {
       refresh();
-    }, 5000);
+    }, 15000);
 
     return () => clearInterval(interval);
 
