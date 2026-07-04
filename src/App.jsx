@@ -7,7 +7,7 @@ import Navbar from './components/section 1/section1';
 // It must come from Deploy > Manage deployments > Web app, and end in /exec
 // Example shape (yours will be different, one long unique string):
 // https://script.google.com/macros/s/AKfycbzABCDEF1234567890abcdefgHIJKLMNOP/exec
-const GOOGLE_SCRIPT_URL = "PASTE_YOUR_REAL_DEPLOYMENT_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4G09Vpj7Hse9YhaahhXZFxBIh0e_zome3IKLCzsKegxcclzQ57DGl3zclMgGszs7OaA/exec";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
