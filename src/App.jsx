@@ -3,10 +3,7 @@ import { useState, useEffect } from "react";
 import logo from "./assets/logo (2).jpeg";
 import Navbar from './components/section 1/section1';
 
-// ⚠️ REPLACE THIS with your actual Apps Script Web App URL.
-// It must come from Deploy > Manage deployments > Web app, and end in /exec
-// Example shape (yours will be different, one long unique string):
-// https://script.google.com/macros/s/AKfycbzABCDEF1234567890abcdefgHIJKLMNOP/exec
+
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4G09Vpj7Hse9YhaahhXZFxBIh0e_zome3IKLCzsKegxcclzQ57DGl3zclMgGszs7OaA/exec";
 
 function App() {
@@ -15,7 +12,7 @@ function App() {
   const [parameter, setParameter] = useState("temperature");
   const [operator, setOperator] = useState(">");
   const [filterValue, setFilterValue] = useState("");
-
+  const [history, setHistory] = useState([]);
   const [devices, setDevices] = useState([
     { id: 'Device 1', temperature: 25, humidity: 60 },
     { id: 'Device 2', temperature: 35, humidity: 80 },
@@ -23,45 +20,60 @@ function App() {
   ]);
 
   const [filterType, setFilterType] = useState("all");
+  useEffect(() => {
+    saveToGoogleSheet(devices);
 
-  // Saves the device list to the Google Sheet via the Apps Script Web App.
-  // Apps Script's doPost usually can't send CORS headers back to a browser fetch,
-  // so we use mode: "no-cors" — this means we can't read the response,
-  // but the POST still reaches the script and appends the row.
-  const saveToGoogleSheet = async (deviceList) => {
-    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("PASTE_YOUR_REAL")) {
-      console.error("GOOGLE_SCRIPT_URL is not set. Update it in App.js.");
-      return;
-    }
+  },[]);
 
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+   const saveToGoogleSheet = async (deviceList) => {
+        try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
         headers: {
-          "Content-Type": "text/plain", // avoids a CORS preflight OPTIONS request
+          "Content-Type": "text/plain", 
         },
         body: JSON.stringify({ devices: deviceList }),
       });
 
-      // With no-cors we can't inspect the response or know the real status,
-      // but if fetch doesn't throw, the request was sent successfully.
+
       console.log("Sent data to Google Sheet (response is opaque due to no-cors).");
     } catch (error) {
       console.error("Error saving to Google Sheet:", error);
     }
   };
+function doGet(e) {
+  var ss = SpreadsheetApp.openById('YOUR_SPREADSHEET_ID_HERE');
+  var sheet = ss.getSheetByName('Sheet1'); // change to your sheet name
+  var data = sheet.getDataRange().getValues();
 
-  function refresh() {
-    const newDevices = devices.map(device => ({
-      ...device,
-      temperature: Math.floor(Math.random() * 50),
-      humidity: Math.floor(Math.random() * 100)
-    }));
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+  
 
-    setDevices(newDevices);
-    saveToGoogleSheet(newDevices);
-  }
+
+    
+
+ function refresh() {
+  const newDevices = devices.map(device => ({
+    ...device,
+    temperature: Math.floor(Math.random() * 50),
+    humidity: Math.floor(Math.random() * 100)
+  }));
+
+  setDevices(newDevices);
+  saveToGoogleSheet(newDevices);
+
+  const timestamp = new Date().toLocaleString();
+  const newRecords = newDevices.map(device => ({
+    ...device,
+    timestamp
+  }));
+
+  setHistory(prevHistory => [...newRecords, ...prevHistory]);
+}
 
   useEffect(() => {
     saveToGoogleSheet(devices);
@@ -187,7 +199,35 @@ function App() {
             </div>
           </div>
         ))}
+        
       </div>
+  <div className="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Device ID</th>
+        <th>Temperature (°C)</th>
+        <th>Humidity (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {history.map((record, index) => (
+        <tr key={index}>
+          <td>{record.timestamp}</td>
+          <td>{record.id}</td>
+          <td style={{ color: record.temperature < 30 ? "#00ff88" : "#ff4d4d" }}>
+            {record.temperature}
+          </td>
+          <td style={{ color: record.humidity < 50 ? "#00ff88" : "#ff4d4d" }}>
+            {record.humidity}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
       <footer className="footer">
         <div className="footer-container">
