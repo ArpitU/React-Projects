@@ -13,6 +13,7 @@ function App() {
   const [operator, setOperator] = useState(">");
   const [filterValue, setFilterValue] = useState("");
   const [history, setHistory] = useState([]);
+  
   const [devices, setDevices] = useState([
     { id: 'Device 1', temperature: 25, humidity: 60 },
     { id: 'Device 2', temperature: 35, humidity: 80 },
@@ -42,15 +43,15 @@ function App() {
       console.error("Error saving to Google Sheet:", error);
     }
   };
-function doGet(e) {
-  var ss = SpreadsheetApp.openById('YOUR_SPREADSHEET_ID_HERE');
-  var sheet = ss.getSheetByName('Sheet1'); // change to your sheet name
-  var data = sheet.getDataRange().getValues();
+// function doGet(e) {
+//   var ss = SpreadsheetApp.openById('I can put id ');
+//   var sheet = ss.getSheetByName('name sheet'); 
+//   var data = sheet.getDataRange().getValues();
 
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+//   return ContentService
+//     .createTextOutput(JSON.stringify(data))
+//     .setMimeType(ContentService.MimeType.JSON);
+// }
   
 
 
@@ -126,6 +127,7 @@ function doGet(e) {
           <li><a href="maps.html">Maps</a></li>
           <li><a href="graph.html">Graph</a></li>
           <li><a href="login.html">Login</a></li>
+          <li><a href= "sheet.html"> Download Sheet </a></li>
         </ul>
       </div>
 
@@ -194,7 +196,9 @@ function doGet(e) {
               </div>
 
               <div className='humidity'>
-                <p>💧 {device.humidity}%</p>
+                <p style={{ color: device.humidity < 70 ? "#00ff88" : "#ff4d4d" }}>
+                  💧 {device.humidity}%
+                </p>
               </div>
             </div>
           </div>
@@ -219,7 +223,7 @@ function doGet(e) {
           <td style={{ color: record.temperature < 30 ? "#00ff88" : "#ff4d4d" }}>
             {record.temperature}
           </td>
-          <td style={{ color: record.humidity < 50 ? "#00ff88" : "#ff4d4d" }}>
+          <td style={{ color: record.humidity < 70 ? "#00ff88" : "#ff4d4d" }}>
             {record.humidity}
           </td>
         </tr>
