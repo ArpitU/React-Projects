@@ -209,6 +209,7 @@ function App() {
   <table>
     <thead>
       <tr>
+        <th>Serial Number</th>
         <th>Timestamp</th>
         <th>Device ID</th>
         <th>Temperature (°C)</th>
@@ -218,6 +219,7 @@ function App() {
     <tbody>
       {history.map((record, index) => (
         <tr key={index}>
+          <td>{index+1}</td>
           <td>{record.timestamp}</td>
           <td>{record.id}</td>
           <td style={{ color: record.temperature < 30 ? "#00ff88" : "#ff4d4d" }}>
