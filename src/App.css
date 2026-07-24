@@ -67,6 +67,14 @@ body{
 
 /* ---------------- layout shell ---------------- */
 
+.dashboardlinks{
+  display: flex;
+  height: auto;
+  padding: 6px 10px;
+  margin: 0 auto;
+  color:#ffb84d;
+  
+}
 .app{
   min-height:100vh;
   display:flex;

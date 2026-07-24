@@ -121,13 +121,13 @@ function App() {
       <div className={open ? "sidebar active" : "sidebar"}>
         <h2>Dashboard</h2>
         <ul>
-          <li>Home</li>
-          <li>Devices</li>
-          <li>Analytics</li>
-          <li><a href="maps.html">Maps</a></li>
-          <li><a href="graph.html">Graph</a></li>
-          <li><a href="login.html">Login</a></li>
-          <li><a href= "sheet.html"> Download Sheet </a></li>
+          <li><a href="home.html" className='dashboardlinks'>Home</a></li>
+          <li><a href="devices.html" className='dashboardlinks'>Devices</a></li>
+          <li><a href="analytics.html" className='dashboardlinks'>Analytics</a></li>
+          <li><a href="maps.html" className='dashboardlinks'>Maps</a></li>
+          <li><a href="graph.html" className='dashboardlinks'>Graph</a></li>
+          <li><a href="login.html" className='dashboardlinks'>Login</a></li>
+          <li><a href= "sheet.html" className='dashboardlinks'> Download Sheet </a></li>
         </ul>
       </div>
 

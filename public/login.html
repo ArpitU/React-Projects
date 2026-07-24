@@ -1,57 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page </title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            background-image: url('https://www.bing.com/ck/a?!&&p=bf05cbb5e986f8e2cac2ceff9a88c4e62aeaf1420e5ac3875519a05f5f382b49JmltdHM9MTc4MDYxNzYwMA&ptn=3&ver=2&hsh=4&fclid=24cc639e-ec1c-6f65-0f1f-75acedba6ede&u=a1L2ltYWdlcy9zZWFyY2g_cT10ZWNoK2ltYWdlJmlkPUM5M0YzQkJFNjUyN0VCODQ0RUM5NUE1MTlGODlGNDBFQTA1NDg5REYmRk9STT1JUUZSQkE');
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-container {
-            background-color: rgb(33, 30, 30);
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-container h2 {
-            margin-bottom: 20px;
-        }
-        .login-container input {
-            width: 90%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #111;
-            border-radius: 3px;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #111;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .login-container button:hover {
-            background-color: #0056b3;
-        }
-        </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in · IoT Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1220;
+    --panel:#111a2e;
+    --panel-alt:#0e1626;
+    --border:#1f2c46;
+    --border-soft:#182238;
+    --text:#eef2f9;
+    --muted:#8494b3;
+    --muted-dim:#5b6a89;
+    --teal:#12c6a8;
+    --teal-dim:#0a3d38;
+    --red:#ff6b6b;
+    --red-dim:#3a1518;
+    --mono:'JetBrains Mono', monospace;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .card{
+    width:100%;
+    max-width:380px;
+    background:var(--panel);
+    border:1px solid var(--border-soft);
+    border-radius:16px;
+    padding:32px 28px;
+  }
+
+  .brand{display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom:22px;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:9px;
+    background:linear-gradient(135deg, var(--teal), #0a8f7c);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:15px; color:#04231e;
+  }
+  .brand-name{font-family:var(--display); font-weight:600; font-size:16px;}
+
+  h1{font-family:var(--display); font-size:20px; font-weight:600; text-align:center;}
+  .sub{color:var(--muted); font-size:13px; text-align:center; margin-top:6px; margin-bottom:26px;}
+  .sub b{color:var(--text); font-weight:500;}
+
+  label{display:block; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:7px;}
+  .field{margin-bottom:16px;}
+  .input-wrap{position:relative;}
+  input{
+    width:100%;
+    background:var(--panel-alt);
+    border:1px solid var(--border-soft);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:14px;
+    padding:11px 13px;
+    border-radius:9px;
+    outline:none;
+    transition:.15s border-color;
+  }
+  input::placeholder{color:var(--muted-dim);}
+  input:focus{border-color:var(--teal);}
+  input.invalid{border-color:var(--red);}
+
+  .domain-hint{font-family:var(--mono); font-size:11px; color:var(--muted-dim); margin-top:7px;}
+
+  .error{
+    display:none;
+    align-items:center;
+    gap:8px;
+    background:var(--red-dim);
+    color:var(--red);
+    font-size:12.5px;
+    padding:10px 12px;
+    border-radius:8px;
+    margin-bottom:16px;
+  }
+  .error.show{display:flex;}
+
+  button{
+    width:100%;
+    background:var(--teal);
+    color:#04231e;
+    font-family:var(--body);
+    font-weight:600;
+    font-size:14px;
+    border:none;
+    padding:12px;
+    border-radius:9px;
+    cursor:pointer;
+    margin-top:4px;
+    transition:.15s opacity;
+  }
+  button:hover{opacity:0.92;}
+  button:active{opacity:0.8;}
+
+  .footline{
+    text-align:center;
+    font-size:12px;
+    color:var(--muted-dim);
+    margin-top:20px;
+  }
+
+  :focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+</style>
 </head>
 <body>
-    <div class="login-container">
-        <h2 style="color: navajowhite;">Login</h2>
-        <form>
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <button type="submit">Login</button>
-        </form>
+
+  <div class="card">
+    <div class="brand">
+      <div class="brand-mark">IO</div>
+      <div class="brand-name">IoT Dashboard</div>
     </div>
+
+    <h1>Sign in</h1>
+    <div class="sub">Access is limited to <b>@coredata.ac.in</b> accounts</div>
+
+    <div class="error" id="errorBox">Only @coredata.ac.in email addresses can sign in.</div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="you@coredata.ac.in" autocomplete="username">
+        <div class="domain-hint">Must end in @coredata.ac.in</div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+
+      <button type="submit">Sign in</button>
+    </form>
+
+    <div class="footline">Trouble signing in? Contact your site administrator.</div>
+  </div>
+
+<script>
+const ALLOWED_DOMAIN = '@coredata.ac.in';
+
+const form = document.getElementById('loginForm');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const errorBox = document.getElementById('errorBox');
+
+function showError(message){
+  errorBox.textContent = message;
+  errorBox.classList.add('show');
+  emailInput.classList.add('invalid');
+}
+function clearError(){
+  errorBox.classList.remove('show');
+  emailInput.classList.remove('invalid');
+}
+
+emailInput.addEventListener('input', clearError);
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  clearError();
+
+  const email = emailInput.value.trim().toLowerCase();
+  const password = passwordInput.value;
+
+  if(!email || !password){
+    showError('Enter your email and password.');
+    return;
+  }
+
+  if(!email.endsWith(ALLOWED_DOMAIN)){
+    showError(`Only ${ALLOWED_DOMAIN} email addresses can sign in.`);
+    return;
+  }
+
+  // Client-side check passed — hand off to your real auth here.
+  // e.g. fetch('/api/login', { method:'POST', body: JSON.stringify({email, password}) })
+  window.location.href = 'analytics.html';
+});
+</script>
 </body>
 </html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics · IoT Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1220;
+    --panel:#111a2e;
+    --panel-alt:#0e1626;
+    --border:#1f2c46;
+    --border-soft:#182238;
+    --text:#eef2f9;
+    --muted:#8494b3;
+    --muted-dim:#5b6a89;
+    --teal:#12c6a8;
+    --teal-dim:#0a3d38;
+    --amber:#f2ab3d;
+    --amber-dim:#3d2e10;
+    --red:#ff6b6b;
+    --red-dim:#3a1518;
+    --mono:'JetBrains Mono', monospace;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    min-height:100vh;
+    padding-bottom:50px;
+  }
+  a{color:inherit; text-decoration:none;}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    border-bottom:1px solid var(--border-soft);
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,18,32,0.92);
+    backdrop-filter:blur(10px);
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:30px; height:30px; border-radius:8px;
+    background:linear-gradient(135deg, var(--teal), #0a8f7c);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:14px; color:#04231e;
+  }
+  .brand-name{font-family:var(--display); font-weight:600; font-size:16px;}
+  .brand-name span{color:var(--muted); font-weight:400;}
+
+  nav.tabs{display:flex; gap:4px; background:var(--panel-alt); padding:4px; border-radius:10px; border:1px solid var(--border-soft);}
+  nav.tabs a{font-size:13px; font-weight:500; color:var(--muted); padding:7px 14px; border-radius:7px; transition:.15s;}
+  nav.tabs a:hover{color:var(--text);}
+  nav.tabs a.active{background:var(--teal); color:#04231e;}
+
+  .top-status{display:flex; align-items:center; gap:18px;}
+  .live-pill{
+    display:flex; align-items:center; gap:7px;
+    font-family:var(--mono); font-size:12px; color:var(--teal);
+    border:1px solid var(--teal-dim); background:rgba(18,198,168,0.06);
+    padding:6px 10px; border-radius:999px;
+  }
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--teal);}
+  .avatar{width:32px; height:32px; border-radius:50%; background:#22314f; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-family:var(--mono); color:var(--muted);}
+
+  .wrap{max-width:1200px; margin:0 auto; padding:28px 32px;}
+
+  .page-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:14px;}
+  .page-head h1{font-family:var(--display); font-size:26px; font-weight:600;}
+  .page-head p{color:var(--muted); font-size:13.5px; margin-top:4px;}
+  .range-toggle{display:flex; gap:4px; background:var(--panel-alt); border:1px solid var(--border-soft); border-radius:9px; padding:4px;}
+  .range-toggle button{font-family:var(--mono); font-size:12px; color:var(--muted); background:none; border:none; padding:7px 12px; border-radius:6px; cursor:pointer; transition:.15s;}
+  .range-toggle button.active{background:var(--border); color:var(--text);}
+
+  /* KPI row */
+  .kpi-row{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:20px;}
+  .kpi{background:var(--panel); border:1px solid var(--border-soft); border-radius:14px; padding:18px;}
+  .kpi-label{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.6px;}
+  .kpi-value{font-family:var(--mono); font-size:28px; font-weight:600; margin-top:10px; letter-spacing:-0.5px;}
+  .kpi-unit{font-size:14px; color:var(--muted); font-weight:400; margin-left:2px;}
+  .kpi-delta{font-size:12px; margin-top:8px; display:flex; align-items:center; gap:5px;}
+  .kpi-delta.pos{color:var(--teal);}
+  .kpi-delta.neg{color:var(--red);}
+
+  /* Panels */
+  .grid{display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px;}
+  .panel{background:var(--panel); border:1px solid var(--border-soft); border-radius:14px; padding:20px;}
+  .panel-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+  .panel-title{font-family:var(--display); font-size:15px; font-weight:600;}
+  .panel-sub{font-size:12px; color:var(--muted-dim); margin-top:2px;}
+
+  
+
+  .status-list{display:flex; flex-direction:column; gap:10px;}
+  .status-row{display:flex; align-items:center; justify-content:space-between; font-size:13px; padding:10px 0; border-bottom:1px solid var(--border-soft);}
+  .status-row:last-child{border-bottom:none;}
+  .status-row .lbl{display:flex; align-items:center; gap:8px; color:var(--muted);}
+  .status-row .lbl .sw{width:9px; height:9px; border-radius:2px;}
+  .status-row .val{font-family:var(--mono); color:var(--text); font-weight:500;}
+
+  .metric-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+  .metric-box{background:var(--panel-alt); border:1px solid var(--border-soft); border-radius:10px; padding:14px;}
+  .metric-box .lbl{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px;}
+  .metric-box .val{font-family:var(--mono); font-size:20px; font-weight:600; margin-top:6px;}
+
+  /* Device table */
+  .table-panel{background:var(--panel); border:1px solid var(--border-soft); border-radius:14px; padding:20px; margin-bottom:16px;}
+  table{width:100%; border-collapse:collapse;}
+  thead th{text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:var(--muted-dim); font-weight:500; padding:0 12px 12px; border-bottom:1px solid var(--border-soft);}
+  tbody td{padding:13px 12px; font-size:13.5px; border-bottom:1px solid var(--border-soft); vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--panel-alt);}
+  .dev-name{font-weight:500;}
+  .dev-id{font-family:var(--mono); font-size:11px; color:var(--muted-dim); display:block; margin-top:2px;}
+  .pill{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:500; padding:4px 9px; border-radius:999px;}
+  .pill.online{background:var(--teal-dim); color:var(--teal);}
+  .pill.warning{background:var(--amber-dim); color:var(--amber);}
+  .pill.offline{background:var(--red-dim); color:var(--red);}
+  .pill .dot2{width:5px; height:5px; border-radius:50%; background:currentColor;}
+  .mono-cell{font-family:var(--mono); color:var(--muted);}
+
+  footer{max-width:1200px; margin:20px auto 0; padding:0 32px; color:var(--muted-dim); font-size:12px; display:flex; justify-content:space-between;}
+
+  @media (max-width:1000px){
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .grid{grid-template-columns:1fr;}
+    nav.tabs{display:none;}
+  }
+  @media (max-width:640px){
+    .kpi-row{grid-template-columns:1fr;}
+    .metric-grid{grid-template-columns:1fr;}
+    .wrap{padding:20px 16px;}
+    .topbar{padding:14px 16px;}
+  }
+  :focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">IO</div>
+      <div class="brand-name">IoT Dashboard <span>/ Analytics</span></div>
+    </div>
+    <nav class="tabs">
+      <a href="#">Overview</a>
+      <a href="#" class="active">Analytics</a>
+      <a href="#">Devices</a>
+      <a href="#">Alerts</a>
+      <a href="#">Settings</a>
+    </nav>
+    <div class="top-status">
+      <div class="live-pill"><span class="dot"></span> LIVE · <span id="clock">--:--:--</span></div>
+      <div class="avatar">CD</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="page-head">
+      <div>
+        <h1>Fleet Analytics</h1>
+        <p>20 sensors across 3 sites</p>
+      </div>
+    
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">Active Devices</div>
+        <div class="kpi-value">3<span class="kpi-unit">/3</span></div>
+        <div class="kpi-delta pos">▲ 3 since yesterday</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Avg Temperature</div>
+        <div class="kpi-value">26.4<span class="kpi-unit">°C</span></div>
+        <div class="kpi-delta neg">▲ 0.6° vs 24h avg</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Power Draw</div>
+        <div class="kpi-value">4.82<span class="kpi-unit">kW</span></div>
+        <div class="kpi-delta pos">▼ 4% vs peak</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Network Uptime</div>
+        <div class="kpi-value">99.2<span class="kpi-unit">%</span></div>
+        <div class="kpi-delta pos">▲ stable, 30d</div>
+      </div>
+    </div>
+
+
+
+  
+
+  </div>
+
+  <footer>
+    <span>IoT Dashboard · Analytics</span>
+    <span id="footTime">Synced just now</span>
+  </footer>
+
+<script>
+function tickClock(){
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {hour12:false});
+}
+tickClock(); setInterval(tickClock, 1000);
+
+
+function batteryColor(b){ return b > 60 ? '#12c6a8' : b > 30 ? '#f2ab3d' : '#ff6b6b'; }
+
+const tbody = document.getElementById('deviceTable');
+devices.forEach(d => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><span class="dev-name">${d.name}</span><span class="dev-id">${d.id}</span></td>
+    <td class="mono-cell">${d.site}</td>
+    <td><span class="pill ${d.status}"><span class="dot2"></span>${d.status.charAt(0).toUpperCase()+d.status.slice(1)}</span></td>
+    <td class="mono-cell">${d.temp}</td>
+    <td class="mono-cell" style="color:${batteryColor(d.batt)}">${d.batt}%</td>
+    <td class="mono-cell">${d.uptime}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+let syncSeconds = 0;
+setInterval(()=>{
+  syncSeconds += 4;
+  document.getElementById('footTime').textContent = `Synced ${syncSeconds}s ago`;
+}, 4000);
+
+document.querySelectorAll('.range-toggle button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.range-toggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
